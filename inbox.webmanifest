@@ -1,0 +1,16 @@
+{
+  "id": "/forms.html?inbox",
+  "name": "Group Connected Inbox",
+  "short_name": "GC Inbox",
+  "description": "Admin inbox for Group Connected form responses",
+  "start_url": "/forms.html?inbox",
+  "scope": "/forms.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}
