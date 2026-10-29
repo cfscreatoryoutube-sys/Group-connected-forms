@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<script>try{var t=localStorage.getItem("gc_theme");if(t&&t!=="auto")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<title>Group Connected forms</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Group Connected forms: fill in, track and review applications.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="https://groupconnected.uk/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="https://groupconnected.uk/favicon-96x96.png">
+<link rel="apple-touch-icon" href="https://groupconnected.uk/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GC Forms">
+<script>
+/* Only the ?inbox page is installable as an app */
+if(/[?&]inbox(&|=|$)/.test(location.search)){var l=document.createElement('link');l.rel='manifest';l.href='https://groupconnected.uk/inbox.webmanifest';document.head.appendChild(l)}
+</script>
+<style>
+:root{--bg:#fff;--fg:#111;--mut:#6b6f76;--card:#f4f5f7;--line:#e5e7eb;--ac:#00b896;--acfg:#04382f;--bad:#c62828;--ok:#0a7a5f;box-sizing:border-box}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0e11;--fg:#f2f2f2;--mut:#9a9aa3;--card:#1a1a20;--line:#2a2a32;--ac:#1ee0bf;--acfg:#04382f;--bad:#ff8a80;--ok:#1ee0bf}}
+:root[data-theme="dark"]{--bg:#0e0e11;--fg:#f2f2f2;--mut:#9a9aa3;--card:#1a1a20;--line:#2a2a32;--ac:#1ee0bf;--acfg:#04382f;--bad:#ff8a80;--ok:#1ee0bf}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 16px;z-index:5}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.5px;color:inherit;text-decoration:none}
+.logo img{width:30px;height:30px}.logo b{color:var(--ac)}
+.sp{flex:1}
+.who{color:var(--mut);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38vw}
+main{max-width:660px;margin:0 auto;padding:16px 16px 70px}
+h1{font-size:24px;line-height:1.2;margin:6px 0 6px;letter-spacing:-.4px}
+h2{font-size:18px;margin:0 0 8px}
+.mut{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+a{color:var(--ac)}
+label.f{display:block;font-weight:600;margin:16px 0 6px}
+label.f i{color:var(--ac);font-style:normal;margin-left:3px}
+input,textarea,select{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
+input[type=checkbox]{width:auto}
+textarea{min-height:100px;resize:vertical}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+button.p{background:var(--ac);color:var(--acfg);border:0;border-radius:20px;padding:10px 20px;font-weight:700}
+button.p:disabled{opacity:.55;cursor:default}
+button.s{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:20px;padding:7px 14px}
+button.d{background:none;color:var(--bad);border:1px solid var(--line);border-radius:20px;padding:7px 14px}
+.err{color:var(--bad);min-height:1.4em;margin:12px 0 0}
+.tabs{display:flex;gap:6px;margin:4px 0 16px;flex-wrap:wrap;position:sticky;top:calc(51px + env(safe-area-inset-top,0px));background:var(--bg);padding:8px 0;z-index:4}
+.tabs button{background:none;border:1px solid var(--line);color:var(--mut);border-radius:20px;padding:7px 14px;font-weight:600}
+.tabs button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tabs button em{font-style:normal;background:var(--ac);color:var(--acfg);border-radius:10px;padding:0 7px;margin-left:5px;font-size:12px}
+.list{display:grid;gap:10px}
+.fl{display:block;width:100%;text-align:left;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.fl:hover{border-color:var(--ac)}
+.fl b{display:block}
+.item{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:var(--card);overflow:hidden}
+.item.pending{border-left:4px solid #e0a800}
+.item.accepted{border-left:4px solid var(--ok)}
+.item.denied{border-left:4px solid var(--bad)}
+.row{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;color:inherit;padding:13px 14px;align-items:flex-start}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block}
+.row .t span{display:block;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row time{color:var(--mut);font-size:13px;white-space:nowrap}
+.pill{display:inline-block;border-radius:12px;padding:1px 10px;font-size:12px;font-weight:700;border:1px solid var(--line)}
+.pill.pending{color:#a67c00}.pill.accepted{color:var(--ok)}.pill.denied{color:var(--bad)}
+.det{padding:0 14px 14px;border-top:1px solid var(--line)}
+.det dl{margin:12px 0}
+.det dt{font-weight:600;margin-top:10px}
+.det dd{margin:2px 0 0;white-space:pre-wrap;word-break:break-word}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.note{border-radius:10px;padding:10px 12px;margin-top:10px;background:var(--bg);border:1px solid var(--line)}
+.note.bad{border-color:var(--bad)}.note.ok{border-color:var(--ok)}
+.q{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;background:var(--bg)}
+.q .top{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.q .top select{width:auto}
+.chk{display:flex;gap:8px;align-items:center;margin:6px 0;font-weight:500}
+.link{display:flex;gap:8px;align-items:center;margin:8px 0}
+.link code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:11px 18px;border-radius:24px;font-weight:600;z-index:20;max-width:90vw}
+.back{background:none;border:0;color:var(--ac);padding:0;margin-bottom:6px;font-weight:600}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://groupconnected.uk/"><img src="https://groupconnected.uk/icon-192.png" alt="" width="30" height="30" data-n="0" onerror="var u=['https://groupconnected.uk/favicon-96x96.png','https://groupconnected.uk/apple-touch-icon.png','https://groupconnected.uk/icon.png'],n=+this.dataset.n;if(n<u.length){this.dataset.n=n+1;this.src=u[n]}else this.style.display='none'"><span>Group <b>Connected</b></span></a>
+  <span class="sp"></span>
+  <span class="who" id="who"></span>
+  <span id="hdr"></span>
+</header>
+<main id="app"><p class="mut">Loading…</p></main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ============ SETTINGS ============ */
+const firebaseConfig={apiKey:"AIzaSyDfLScvbQ81XZnJcNuyHsl7q4lZwvQQ2BE",authDomain:"group-connected-2f6b0.firebaseapp.com",projectId:"group-connected-2f6b0",appId:"1:609393183506:web:15a4cefdcbf81bcbc341cb",messagingSenderId:"609393183506"};
+/* Must match the address in firestore.rules (the /mail rule only allows this recipient) */
+const CEO_EMAIL='GroupConncted@outlook.com';
+const SITE='https://groupconnected.uk';
+/* ================================== */
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const qs=new URLSearchParams(location.search);
+const INBOX=qs.has('inbox');
+const ROLES={fan:'Fans',artist:'Artists',label:'Labels'};
+const TYPES={short:'Short answer',long:'Long answer',choice:'Choice',link:'Link'};
+const AERR={'auth/invalid-credential':'Wrong email or password','auth/wrong-password':'Wrong email or password','auth/user-not-found':'Wrong email or password','auth/invalid-email':'Enter a valid email','auth/too-many-requests':'Too many tries. Wait a bit and try again.'};
+
+let auth,db,user=null,me=null,role='fan',isCEO=false,ceoUid=null;
+let forms=[],subs=[],unsubs=[],loaded={forms:false,subs:false},firstSubs=true,deferred=null;
+let tab='forms';          /* forms | create | submitted | results */
+let sub=null;             /* null, {fill:id,prefill}, {build:id|'new'} */
+let openId=null,denyId=null,draft=null,shown=false;
+
+function toast(t){const e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),3500)}
+function ago(ts){const s=Math.max(1,Math.floor((Date.now()-ts)/1000));if(s<60)return 'just now';const m=Math.floor(s/60);if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' h ago';const d=Math.floor(h/24);if(d<7)return d+' d ago';return new Date(ts).toLocaleDateString()}
+const PAGE=location.origin+location.pathname;
+const formUrl=id=>PAGE+'?form='+id;
+const nid=()=>Math.random().toString(36).slice(2,8);
+const errText=e=>(e&&e.code?e.code+': ':'')+(e&&e.message?e.message:String(e));
+async function copy(t){try{await navigator.clipboard.writeText(t);toast('Copied')}catch(e){toast('Couldn’t copy')}}
+
+/* ---------- boot ---------- */
+firebase.initializeApp(firebaseConfig);
+auth=firebase.auth();db=firebase.firestore();
+if(INBOX){
+  if('serviceWorker' in navigator)addEventListener('load',async()=>{try{if(!(await navigator.serviceWorker.getRegistration('/')))await navigator.serviceWorker.register('/sw.js')}catch(e){}});
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;hdr()});
+  addEventListener('appinstalled',()=>{deferred=null;hdr()});
+}
+auth.onAuthStateChanged(async u=>{
+  unsubs.forEach(f=>f());unsubs=[];
+  shown=false;user=null;me=null;role='fan';isCEO=false;forms=[];subs=[];loaded={forms:false,subs:false};firstSubs=true;sub=null;openId=null;denyId=null;
+  if(!u){hdr();return renderLogin()}
+  $('#app').innerHTML='<p class="mut">Loading…</p>';
+  try{
+    if((await db.doc('banned/'+u.uid).get()).exists){await auth.signOut();alert('This account has been removed.');return}
+    const d=await db.doc('uids/'+u.uid).get();
+    me=d.exists?d.data().username:null;
+    try{const l=await db.doc('adminlock/lock').get();ceoUid=l.exists?l.data().uid:null}catch(e){ceoUid=null}
+    isCEO=!!ceoUid&&ceoUid===u.uid;
+    if(me){const a=await db.doc('accounts/'+me).get();if(a.exists)role=a.data().role||'fan'}
+    else if(isCEO)me='ceo';
+  }catch(e){console.warn(e);$('#app').innerHTML='<h1>Couldn’t load your account</h1><p class="mut">'+esc(errText(e))+'</p>';return}
+  if(!me){$('#app').innerHTML='<h1>Finish signing up</h1><p class="mut">This email has no Group Connected username yet. Finish signing up at <a href="'+SITE+'">groupconnected.uk</a>, then come back.</p>';hdr();return}
+  user=u;
+  const want=qs.get('form');
+  if(want){tab='forms';sub={fill:want}}
+  else if(INBOX&&isCEO)tab='submitted';
+  hdr();listen();
+});
+
+function listen(){
+  const fail=e=>{console.warn(e);$('#app').innerHTML='<h1>Couldn’t load</h1><p class="mut">'+esc(errText(e))+'</p><p class="mut">If this says permission-denied, publish the new firestore.rules in Firebase, then reload.</p>'};
+  unsubs.push(db.collection('forms').onSnapshot(s=>{
+    forms=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.ts||0)-(a.ts||0));
+    loaded.forms=true;refresh();
+  },fail));
+  const base=db.collection('submissions');
+  const q=isCEO?base.orderBy('ts','desc').limit(300):base.where('uid','==',user.uid);
+  unsubs.push(q.onSnapshot(s=>{
+    if(isCEO&&!firstSubs)s.docChanges().forEach(c=>{if(c.type==='added'&&c.doc.data().status==='pending'&&c.doc.data().uid!==user.uid)toast('New submission: '+(c.doc.data().title||'form'))});
+    firstSubs=false;
+    subs=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.ts||0)-(a.ts||0));
+    loaded.subs=true;refresh();
+  },fail));
+}
+/* Re-render, but never while someone is typing in a form or the builder */
+function refresh(){
+  if(!(loaded.forms&&loaded.subs))return;
+  badge();
+  if(shown&&sub&&(sub.fill||sub.build))return;
+  if(shown&&denyId&&$('#rs'))return;
+  render();
+}
+function pendingCount(){return subs.filter(s=>s.status==='pending'&&(isCEO||s.uid===(user&&user.uid))).length}
+function badge(){
+  const n=isCEO?subs.filter(s=>s.status==='pending').length:0;
+  document.title=(n?'('+n+') ':'')+'Group Connected forms';
+  try{if(n){navigator.setAppBadge&&navigator.setAppBadge(n)}else{navigator.clearAppBadge&&navigator.clearAppBadge()}}catch(e){}
+}
+function hdr(){
+  $('#who').textContent=user?'@'+me+(isCEO?' · CEO':''):'';
+  $('#hdr').innerHTML=(deferred?'<button class="s" id="inst">Install app</button> ':'')+(user?'<button class="s" id="out">Sign out</button>':'');
+  if($('#inst'))$('#inst').onclick=async()=>{deferred.prompt();await deferred.userChoice;deferred=null;hdr()};
+  if($('#out'))$('#out').onclick=()=>auth.signOut();
+}
+
+/* ---------- login ---------- */
+function renderLogin(){
+  $('#app').innerHTML=`<h1>Group Connected forms</h1><p class="mut">Sign in with the same email and password you use on groupconnected.uk.</p>
+  <form id="lf" class="card" style="margin-top:16px" novalidate>
+    <label class="f" for="em">Email</label><input id="em" type="email" autocomplete="username">
+    <label class="f" for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
+    <p class="err" id="err" role="alert"></p>
+    <div class="acts"><button class="p" type="submit">Sign in</button><button class="s" type="button" id="fg">Forgot password</button></div>
+    <p class="mut" style="margin-bottom:0">No account yet? <a href="${SITE}">Sign up free on groupconnected.uk</a></p>
+  </form>`;
+  $('#lf').addEventListener('submit',async e=>{
+    e.preventDefault();const err=$('#err');err.textContent='';
+    try{await auth.signInWithEmailAndPassword($('#em').value.trim(),$('#pw').value)}
+    catch(x){err.textContent=AERR[x.code]||'Couldn’t sign in. Try again.'}
+  });
+  $('#fg').onclick=async()=>{const err=$('#err'),em=$('#em').value.trim();if(!em){err.textContent='Enter your email first';return}
+    try{await auth.sendPasswordResetEmail(em);err.style.color='var(--ac)';err.textContent='Password reset email sent'}catch(x){err.style.color='';err.textContent=AERR[x.code]||'Couldn’t send email'}};
+}
+
+/* ---------- shell + tabs ---------- */
+function render(){
+  if(!user)return;
+  shown=true;
+  const np=pendingCount();
+  const tabs=[['forms','Forms'],...(isCEO?[['create','Create form']]:[]),['submitted','Submitted'+(np?` <em>${np}</em>`:'')],['results','Results']];
+  if(tab==='create'&&!isCEO)tab='forms';
+  $('#app').innerHTML=`<div class="tabs" role="tablist">${tabs.map(t=>`<button role="tab" aria-selected="${tab===t[0]}" class="${tab===t[0]?'on':''}" data-tab="${t[0]}">${t[1]}</button>`).join('')}</div><div id="pane"></div>`;
+  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;sub=null;openId=null;denyId=null;draft=null;render()});
+  if(sub&&sub.fill)return renderFill();
+  if(sub&&sub.build)return renderBuilder();
+  ({forms:renderForms,create:renderCreate,submitted:renderSubmitted,results:renderResults})[tab]();
+}
+const canFill=f=>f.active!==false&&(isCEO||!f.audience||f.audience.includes(role));
+
+/* ---------- FORMS tab: list + fill ---------- */
+function renderForms(){
+  const list=forms.filter(canFill);
+  $('#pane').innerHTML=`<h1>Forms</h1><p class="mut">Pick a form to fill in.</p>`+
+    (list.length?`<div class="list" style="margin-top:14px">${list.map(f=>`<button class="fl" data-fill="${esc(f.id)}"><b>${esc(f.title)}</b><span class="mut">${esc(f.intro||'')}</span></button>`).join('')}</div>`
+    :`<div class="card mut" style="margin-top:14px">No forms are open for you right now.</div>`);
+  document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=()=>{sub={fill:b.dataset.fill};render()});
+}
+function renderFill(){
+  const f=forms.find(x=>x.id===sub.fill),pane=$('#pane');
+  if(!f||!canFill(f)){pane.innerHTML=`<button class="back" id="bk">← Forms</button><h1>Not available</h1><p class="mut">This form is closed or isn’t open to your account type.</p>`;$('#bk').onclick=()=>{sub=null;render()};return}
+  const pre=sub.prefill||{};
+  pane.innerHTML=`<button class="back" id="bk">← Forms</button><h1>${esc(f.title)}</h1><p class="mut">${esc(f.intro||'')}</p>
+  ${sub.prefill?'<div class="note">Your answers from last time are filled in. Update them and send again.</div>':''}
+  <form id="fm" novalidate class="card" style="margin-top:16px">
+    ${(f.questions||[]).map((x,i)=>{
+      const id='q'+i,v=esc(pre[x.label]||''),lab=`<label class="f" for="${id}">${esc(x.label)}${x.required?'<i title="Required">*</i>':''}</label>`;
+      if(x.type==='long')return lab+`<textarea id="${id}" maxlength="3000">${v}</textarea>`;
+      if(x.type==='choice')return lab+`<select id="${id}"><option value="">Choose…</option>${(x.options||[]).map(o=>`<option${pre[x.label]===o?' selected':''}>${esc(o)}</option>`).join('')}</select>`;
+      return lab+`<input id="${id}" type="${x.type==='link'?'url':'text'}" maxlength="500" autocomplete="off" value="${v}"${x.type==='link'?' placeholder="https://"':''}>`;
+    }).join('')}
+    <p class="err" id="err" role="alert"></p>
+    <button class="p" id="go" type="submit">Send</button>
+  </form>`;
+  $('#bk').onclick=()=>{sub=null;render()};
+  $('#fm').addEventListener('submit',e=>{e.preventDefault();sendForm(f)});
+}
+async function sendForm(f){
+  const err=$('#err'),btn=$('#go');err.textContent='';
+  const answers=[];
+  for(let i=0;i<(f.questions||[]).length;i++){
+    const x=f.questions[i],el=$('#q'+i),v=el.value.trim();
+    if(x.required&&!v){err.textContent='Fill in “'+x.label+'”.';el.focus();return}
+    if(x.type==='link'&&v&&!/^https?:\/\/\S+\.\S+/i.test(v)){err.textContent='“'+x.label+'” needs a link starting with https://';el.focus();return}
+    answers.push({q:x.label,a:v.slice(0,3000)});
+  }
+  btn.disabled=true;btn.textContent='Sending…';
+  const ref=db.collection('submissions').doc();
+  try{
+    await ref.set({formId:f.id,title:f.title,answers,u:me,uid:user.uid,role,status:'pending',ts:Date.now()});
+  }catch(e){
+    console.warn(e);err.textContent='Couldn’t send: '+errText(e);btn.disabled=false;btn.textContent='Send';return;
+  }
+  /* email the CEO (needs the Trigger Email extension); never blocks the submission */
+  try{
+    const body=answers.map(x=>x.q+': '+x.a.slice(0,300)).join('\n');
+    await db.collection('mail').doc(ref.id).set({to:[CEO_EMAIL],message:{subject:'Group Connected: new submission – '+f.title,text:('@'+me+' ('+role+') submitted “'+f.title+'”.\n\n'+body+'\n\nReview it: '+PAGE+'?inbox').slice(0,2800)}});
+  }catch(e){console.warn('mail',e)}
+  sub=null;tab='submitted';toast('Sent. The CEO will review it.');render();
+}
+
+/* ---------- SUBMITTED + RESULTS ---------- */
+function answersHtml(s){
+  const a=Array.isArray(s.answers)?s.answers:[];
+  return `<dl>${a.map(x=>`<dt>${esc(x.q)}</dt><dd>${esc(x.a||'—')}</dd>`).join('')}</dl>`;
+}
+const statusLabel=s=>s==='accepted'?'Accepted':s==='denied'?'Denied':'Waiting for review';
+function item(s){
+  const open=openId===s.id,a=Array.isArray(s.answers)?s.answers:[];
+  const prev=isCEO?'@'+s.u+' · '+(ROLES[s.role]||s.role||'').replace(/s$/,''):(a[0]?a[0].a:'');
+  let det='';
+  if(open){
+    det=`<div class="det">${answersHtml(s)}`;
+    if(s.status==='denied')det+=`<div class="note bad"><b>Denied.</b> Reason: ${esc(s.reason||'No reason given')}<br>Please reapply.</div>`;
+    if(s.status==='accepted')det+=`<div class="note ok"><b>Accepted.</b></div>`;
+    det+='<div class="acts">';
+    if(isCEO){
+      if(s.status==='pending'){
+        det+=`<button class="p" data-ok="${esc(s.id)}">Approve</button><button class="d" data-no="${esc(s.id)}">Deny</button>`;
+      }else det+=`<button class="s" data-reopen="${esc(s.id)}">Move back to Submitted</button>`;
+      det+=`<button class="s" data-copy="@${esc(s.u)}">Copy @${esc(s.u)}</button><button class="d" data-del="${esc(s.id)}">Delete</button>`;
+    }else if(s.status==='denied'){
+      const f=forms.find(x=>x.id===s.formId);
+      if(f&&canFill(f))det+=`<button class="p" data-reapply="${esc(s.id)}">Reapply</button>`;
+    }
+    det+='</div>';
+    if(isCEO&&denyId===s.id)det+=`<div class="card" style="margin-top:12px"><label class="f" for="rs" style="margin-top:0">Reason for denying (they will see this and be asked to reapply)</label><textarea id="rs" maxlength="500"></textarea><p class="err" id="rerr" role="alert"></p><div class="acts"><button class="d" data-confirm="${esc(s.id)}">Confirm deny</button><button class="s" data-cancel="1">Cancel</button></div></div>`;
+    det+='</div>';
+  }
+  return `<article class="item ${esc(s.status)}"><button class="row" data-id="${esc(s.id)}" aria-expanded="${open}">
+    <span class="t"><b>${esc(s.title)}</b><span>${esc(prev)}</span></span>
+    <span style="text-align:right"><time>${ago(s.ts)}</time><br><span class="pill ${esc(s.status)}">${statusLabel(s.status)}</span></span></button>${det}</article>`;
+}
+function wire(){
+  document.querySelectorAll('.row').forEach(b=>b.onclick=()=>{openId=openId===b.dataset.id?null:b.dataset.id;denyId=null;render()});
+  document.querySelectorAll('[data-ok]').forEach(b=>b.onclick=()=>decide(b.dataset.ok,'accepted'));
+  document.querySelectorAll('[data-no]').forEach(b=>b.onclick=()=>{denyId=b.dataset.no;render();setTimeout(()=>{const r=$('#rs');if(r)r.focus()},0)});
+  document.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>{denyId=null;render()});
+  document.querySelectorAll('[data-confirm]').forEach(b=>b.onclick=()=>{
+    const r=$('#rs').value.trim();if(!r){$('#rerr').textContent='Write a reason first.';$('#rs').focus();return}
+    decide(b.dataset.confirm,'denied',r)});
+  document.querySelectorAll('[data-reopen]').forEach(b=>b.onclick=()=>decide(b.dataset.reopen,'pending'));
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delSub(b.dataset.del));
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copy(b.dataset.copy));
+  document.querySelectorAll('[data-reapply]').forEach(b=>b.onclick=()=>{
+    const s=subs.find(x=>x.id===b.dataset.reapply);if(!s)return;
+    const pre={};(s.answers||[]).forEach(x=>pre[x.q]=x.a);
+    tab='forms';sub={fill:s.formId,prefill:pre};render()});
+}
+function renderSubmitted(){
+  const list=subs.filter(s=>s.status==='pending');
+  $('#pane').innerHTML=isCEO
+   ?`<h1>Submitted</h1><p class="mut">Everything people have submitted that you haven’t decided on yet. Open one to approve or deny it.</p><div style="margin-top:14px">${list.length?list.map(item).join(''):'<div class="card mut">Nothing waiting. New submissions show up here live.</div>'}</div>`
+   :`<h1>Submitted</h1><p class="mut">Forms you’ve sent that haven’t been looked at yet. Once they’re decided they move to Results.</p><div style="margin-top:14px">${list.length?list.map(item).join(''):'<div class="card mut">Nothing waiting. Fill in a form from the Forms tab.</div>'}</div>`;
+  wire();
+}
+function renderResults(){
+  const list=subs.filter(s=>s.status!=='pending');
+  $('#pane').innerHTML=`<h1>Results</h1><p class="mut">${isCEO?'Submissions you’ve already decided on.':'Decisions on the forms you sent.'}</p><div style="margin-top:14px">${list.length?list.map(item).join(''):'<div class="card mut">No results yet.</div>'}</div>`;
+  wire();
+}
+async function decide(id,st,reason){
+  const s=subs.find(x=>x.id===id);if(!s)return;
+  try{
+    const b=db.batch();
+    b.update(db.doc('submissions/'+id),{status:st,reason:st==='denied'?reason:'',decidedTs:Date.now(),decidedBy:me});
+    if(st!=='pending'){
+      const text=st==='accepted'?'Your “'+s.title+'” submission was accepted.':'Your “'+s.title+'” submission was denied: '+reason+' Please reapply.';
+      b.set(db.collection('notifs').doc(),{to:s.u,tu:s.uid,text:text.slice(0,400),k:'form',read:false,ts:Date.now()});
+    }
+    await b.commit();
+    denyId=null;openId=null;
+    toast(st==='accepted'?'Approved':st==='denied'?'Denied. They’ll see your reason.':'Moved back to Submitted');
+    render();
+  }catch(e){console.warn(e);toast('Couldn’t save: '+errText(e));const r=$('#rerr');if(r)r.textContent=errText(e)}
+}
+async function delSub(id){if(!confirm('Delete this submission? This can’t be undone.'))return;try{await db.doc('submissions/'+id).delete();openId=null;toast('Deleted')}catch(e){toast('Couldn’t delete: '+errText(e))}}
+
+/* ---------- CREATE FORM tab (CEO only) ---------- */
+function renderCreate(){
+  $('#pane').innerHTML=`<h1>Create form</h1><p class="mut">Forms you make appear on everyone’s Forms tab (for the account types you choose).</p>
+  <div class="acts" style="margin:12px 0"><button class="p" id="nf">New form</button></div>
+  ${forms.length?forms.map(f=>`<div class="card" style="margin-bottom:10px">
+    <b>${esc(f.title)}</b> ${f.active===false?'<span class="pill">Off</span>':'<span class="pill accepted">On</span>'}
+    <div class="mut">${esc((f.audience||[]).map(r=>ROLES[r]).join(', ')||'Nobody')} · ${(f.questions||[]).length} questions · ${subs.filter(s=>s.formId===f.id).length} submitted</div>
+    <div class="link"><code>${esc(formUrl(f.id))}</code><button class="s" data-copy="${esc(formUrl(f.id))}">Copy link</button></div>
+    <div class="acts"><button class="s" data-edit="${esc(f.id)}">Edit</button><button class="s" data-tog="${esc(f.id)}">${f.active===false?'Switch on':'Switch off'}</button><button class="d" data-rm="${esc(f.id)}">Delete</button></div>
+  </div>`).join(''):'<div class="card mut">No forms yet. Press New form.</div>'}`;
+  $('#nf').onclick=()=>{draft={id:null,title:'',intro:'',audience:['fan','artist','label'],active:true,questions:[{id:nid(),label:'',type:'short',required:true,options:[]}]};sub={build:'new'};render()};
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copy(b.dataset.copy));
+  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
+    const f=forms.find(x=>x.id===b.dataset.edit);
+    draft={id:f.id,title:f.title,intro:f.intro||'',audience:[...(f.audience||[])],active:f.active!==false,questions:(f.questions||[]).map(x=>({id:nid(),label:x.label,type:x.type,required:!!x.required,options:[...(x.options||[])]}))};
+    sub={build:f.id};render()});
+  document.querySelectorAll('[data-tog]').forEach(b=>b.onclick=async()=>{const f=forms.find(x=>x.id===b.dataset.tog);try{await db.doc('forms/'+f.id).update({active:f.active===false})}catch(e){toast('Couldn’t update: '+errText(e))}});
+  document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this form? Submissions already sent are kept.'))return;try{await db.doc('forms/'+b.dataset.rm).delete();toast('Deleted')}catch(e){toast('Couldn’t delete: '+errText(e))}});
+}
+function renderBuilder(){
+  if(!isCEO||!draft){sub=null;return render()}
+  const d=draft;
+  $('#pane').innerHTML=`<button class="back" id="bk">← Back</button><h1>${d.id?'Edit form':'New form'}</h1>
+  <div class="card">
+    <label class="f" for="bt" style="margin-top:0">Title</label><input id="bt" maxlength="100" value="${esc(d.title)}">
+    <label class="f" for="bi">Intro (optional)</label><textarea id="bi" maxlength="500" style="min-height:70px">${esc(d.intro)}</textarea>
+    <label class="f">Who can fill it in</label>
+    ${Object.keys(ROLES).map(r=>`<label class="chk"><input type="checkbox" data-aud="${r}"${d.audience.includes(r)?' checked':''}> ${ROLES[r]}</label>`).join('')}
+    <label class="chk" style="margin-top:12px"><input type="checkbox" id="ba"${d.active?' checked':''}> Form is on (visible to members)</label>
+    <label class="f">Questions</label>
+    ${d.questions.map((x,i)=>`<div class="q" data-i="${i}">
+      <div class="top">
+        <select data-k="type" aria-label="Question type">${Object.keys(TYPES).map(t=>`<option value="${t}"${x.type===t?' selected':''}>${TYPES[t]}</option>`).join('')}</select>
+        <label class="chk" style="margin:0"><input type="checkbox" data-k="required"${x.required?' checked':''}> Required</label>
+        <span class="sp"></span>
+        <button type="button" class="s" data-mv="-1" aria-label="Move up"${i===0?' disabled':''}>↑</button>
+        <button type="button" class="s" data-mv="1" aria-label="Move down"${i===d.questions.length-1?' disabled':''}>↓</button>
+        <button type="button" class="d" data-rmq aria-label="Remove question">✕</button>
+      </div>
+      <input data-k="label" maxlength="200" placeholder="Question" value="${esc(x.label)}" aria-label="Question text">
+      ${x.type==='choice'?`<textarea data-k="options" style="min-height:70px;margin-top:8px" placeholder="One option per line" aria-label="Options">${esc(x.options.join('\n'))}</textarea>`:''}
+    </div>`).join('')}
+    <button type="button" class="s" id="aq">+ Add question</button>
+    <p class="err" id="err" role="alert"></p>
+    <div class="acts"><button class="p" id="sv">Save form</button><button class="s" id="cn">Cancel</button></div>
+  </div>`;
+  const sync=()=>{ /* copy the inputs back into draft before any re-render */
+    d.title=$('#bt').value;d.intro=$('#bi').value;d.active=$('#ba').checked;
+    d.audience=[...document.querySelectorAll('[data-aud]')].filter(c=>c.checked).map(c=>c.dataset.aud);
+    document.querySelectorAll('.q').forEach(el=>{const x=d.questions[+el.dataset.i];
+      x.label=el.querySelector('[data-k=label]').value;x.type=el.querySelector('[data-k=type]').value;x.required=el.querySelector('[data-k=required]').checked;
+      const o=el.querySelector('[data-k=options]');if(o)x.options=o.value.split('\n').map(s=>s.trim()).filter(Boolean)})};
+  const leave=()=>{draft=null;sub=null;render()};
+  $('#bk').onclick=leave;$('#cn').onclick=leave;
+  $('#aq').onclick=()=>{sync();d.questions.push({id:nid(),label:'',type:'short',required:false,options:[]});renderBuilder()};
+  document.querySelectorAll('[data-k=type]').forEach(s=>s.onchange=()=>{sync();renderBuilder()});
+  document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{sync();const i=+b.closest('.q').dataset.i,j=i+ +b.dataset.mv;[d.questions[i],d.questions[j]]=[d.questions[j],d.questions[i]];renderBuilder()});
+  document.querySelectorAll('[data-rmq]').forEach(b=>b.onclick=()=>{sync();d.questions.splice(+b.closest('.q').dataset.i,1);renderBuilder()});
+  $('#sv').onclick=async()=>{
+    sync();const err=$('#err');err.textContent='';
+    if(!d.title.trim()){err.textContent='Give the form a title.';return}
+    if(!d.audience.length){err.textContent='Choose who can fill it in.';return}
+    if(!d.questions.length){err.textContent='Add at least one question.';return}
+    for(const x of d.questions){
+      if(!x.label.trim()){err.textContent='Every question needs text.';return}
+      if(x.type==='choice'&&x.options.length<2){err.textContent='“'+x.label+'” needs at least two options (one per line).';return}
+    }
+    const labels=d.questions.map(x=>x.label.trim());
+    if(new Set(labels).size!==labels.length){err.textContent='Two questions have the same text. Make each one different.';return}
+    const data={title:d.title.trim(),intro:d.intro.trim(),audience:d.audience,active:d.active,
+      questions:d.questions.map(x=>({label:x.label.trim(),type:x.type,required:!!x.required,options:x.type==='choice'?x.options:[]}))};
+    const btn=$('#sv');btn.disabled=true;btn.textContent='Saving…';
+    try{
+      if(d.id)await db.doc('forms/'+d.id).update(data);
+      else await db.collection('forms').add({...data,ts:Date.now(),by:me});
+      toast('Form saved');leave();
+    }catch(e){console.warn(e);err.textContent='Couldn’t save: '+errText(e);btn.disabled=false;btn.textContent='Save form'}
+  };
+}
+</script>
+</body></html>
