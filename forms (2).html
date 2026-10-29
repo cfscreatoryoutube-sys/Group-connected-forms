@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<script>try{var t=localStorage.getItem("gc_theme");if(t&&t!=="auto")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<title>Group Connected forms</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Forms for Group Connected labels, groups and artists.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="https://groupconnected.uk/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="https://groupconnected.uk/favicon-96x96.png">
+<link rel="apple-touch-icon" href="https://groupconnected.uk/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GC Inbox">
+<script>
+/* Only the ?inbox page is installable, so members opening a form link never see an install prompt */
+if(/[?&]inbox(&|=|$)/.test(location.search)){var l=document.createElement('link');l.rel='manifest';l.href='/inbox.webmanifest';document.head.appendChild(l)}
+</script>
+<style>
+:root{--bg:#fff;--fg:#111;--mut:#6b6f76;--card:#f4f5f7;--line:#e5e7eb;--ac:#00b896;--acfg:#04382f;--bad:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0e11;--fg:#f2f2f2;--mut:#9a9aa3;--card:#1a1a20;--line:#2a2a32;--ac:#1ee0bf;--acfg:#04382f;--bad:#ff8a80}}
+:root[data-theme="dark"]{--bg:#0e0e11;--fg:#f2f2f2;--mut:#9a9aa3;--card:#1a1a20;--line:#2a2a32;--ac:#1ee0bf;--acfg:#04382f;--bad:#ff8a80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 16px;z-index:5}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.5px;color:inherit;text-decoration:none}
+.logo img{width:30px;height:30px}.logo b{color:var(--ac)}
+.sp{flex:1}
+main{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:24px;line-height:1.2;margin:6px 0 6px;letter-spacing:-.4px}
+h2{font-size:17px;margin:0 0 4px}
+.mut{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+a{color:var(--ac)}
+label.f{display:block;font-weight:600;margin:16px 0 6px}
+label.f i{color:var(--ac);font-style:normal;margin-left:3px}
+input,textarea,select{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+input[type=checkbox]{width:auto}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+button.p{background:var(--ac);color:var(--acfg);border:0;border-radius:20px;padding:10px 20px;font-weight:700}
+button.p:disabled{opacity:.55;cursor:default}
+button.s,a.s{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:20px;padding:7px 14px;text-decoration:none;display:inline-block}
+button.d{background:none;color:var(--bad);border:1px solid var(--line);border-radius:20px;padding:7px 14px}
+.err{color:var(--bad);min-height:1.4em;margin:12px 0 0}
+.ok{color:var(--ac)}
+.formlist{display:grid;gap:10px;margin-top:18px}
+.formlist button.fl{display:block;width:100%;text-align:left;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.formlist button.fl:hover{border-color:var(--ac)}
+.formlist b{display:block}
+.tabs{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+.tabs button{background:none;border:1px solid var(--line);color:var(--mut);border-radius:20px;padding:6px 14px;font-weight:600}
+.tabs button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tabs .n{background:var(--ac);color:var(--acfg);border-radius:10px;padding:0 7px;margin-left:5px;font-size:12px}
+.item{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:var(--card);overflow:hidden}
+.item.new{border-left:4px solid var(--ac)}
+.row{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;color:inherit;padding:13px 14px;align-items:flex-start}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block}
+.row .t span{display:block;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row time{color:var(--mut);font-size:13px;white-space:nowrap}
+.det{padding:0 14px 14px;border-top:1px solid var(--line)}
+.det dl{margin:12px 0}
+.det dt{font-weight:600;margin-top:10px}
+.det dd{margin:2px 0 0;white-space:pre-wrap;word-break:break-word}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.link{display:flex;gap:8px;align-items:center;margin:8px 0}
+.link code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:0 8px;font-size:12px;color:var(--mut);margin-left:6px}
+.pill.on{color:var(--acfg);background:var(--ac);border-color:var(--ac)}
+.fld{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;background:var(--bg)}
+.fld .two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.inl{display:flex;align-items:center;gap:8px;margin:8px 0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:22px;z-index:20;max-width:90%;display:none}
+</style></head>
+<body>
+<header>
+  <a class="logo" href="https://groupconnected.uk/"><img src="https://groupconnected.uk/favicon-96x96.png" alt=""><span>Group <b>Connected</b></span></a>
+  <span class="sp"></span>
+  <span id="who" class="mut"></span>
+  <button class="s" id="out" hidden onclick="logout()">Sign out</button>
+</header>
+<main id="app"><p class="mut">Loading…</p></main>
+<div id="toast" role="status"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ---------- settings ---------- */
+const firebaseConfig={apiKey:"AIzaSyDfLScvbQ81XZnJcNuyHsl7q4lZwvQQ2BE",authDomain:"group-connected-2f6b0.firebaseapp.com",projectId:"group-connected-2f6b0",appId:"1:609393183506:web:15a4cefdcbf81bcbc341cb",messagingSenderId:"609393183506"};
+const CEO_EMAIL='GroupConncted@outlook.com'; /* must match the address in firestore.rules (and index.html REPORT_TO) */
+const SITE='https://groupconnected.uk';
+const INBOX=/[?&]inbox(&|=|$)/.test(location.search);
+const FORM_ID=new URLSearchParams(location.search).get('form');
+const AERR={'auth/invalid-credential':'Wrong email or password','auth/wrong-password':'Wrong email or password','auth/user-not-found':'Wrong email or password','auth/invalid-email':'Enter a valid email','auth/too-many-requests':'Too many tries. Wait a bit.'};
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const when=t=>new Date(t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+const ROLE={artist:'Artist / group',label:'Label'};
+const TYPES={text:'Short answer',long:'Long answer',choice:'Choice',link:'Link'};
+let toastT;function toast(m,ms=2600){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>t.style.display='none',ms)}
+async function copy(txt,msg){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}toast(msg||'Copied')}
+const view=h=>{$('#app').innerHTML=h};
+
+/* ---------- state ---------- */
+let auth,db,unsub=null,deferredInstall=null;
+const S={user:null,uname:'',role:'',admin:false,forms:[],subs:[],emails:{},page:/[?&]forms(&|=|$)/.test(location.search)?'forms':'resp',tab:'new',open:null,edit:null,fill:null,busy:false,lastSend:0};
+
+if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+auth=firebase.auth();db=firebase.firestore();
+
+if(INBOX&&'serviceWorker' in navigator)addEventListener('load',async()=>{try{if(!(await navigator.serviceWorker.getRegistration('/')))await navigator.serviceWorker.register('/sw.js')}catch(e){}});
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(S.admin&&INBOX)renderInbox()});
+addEventListener('appinstalled',()=>{deferredInstall=null;if(S.admin&&INBOX)renderInbox()});
+
+/* ---------- sign in (same Firebase login as groupconnected.uk) ---------- */
+auth.onAuthStateChanged(async u=>{
+  if(unsub){unsub();unsub=null}
+  Object.assign(S,{user:u,uname:'',role:'',admin:false,subs:[],forms:[],open:null,edit:null,fill:null});
+  $('#out').hidden=!u;$('#who').textContent='';
+  if(!u){loginView();return}
+  view('<p class="mut">Checking your account…</p>');
+  try{
+    if((await db.doc('banned/'+u.uid).get()).exists){await auth.signOut();loginView('This account has been removed.');return}
+    S.admin=(await db.doc('admins/'+u.uid).get()).exists;
+    const d=await db.doc('uids/'+u.uid).get();S.uname=d.exists?d.data().username:'';
+    if(S.uname){const a=await db.doc('accounts/'+S.uname).get();S.role=a.exists?(a.data().role||''):''}
+  }catch(e){console.error(e);view('<div class="card"><h2>Could not load your account</h2><p class="mut">Check your connection and try again.</p><button class="s" onclick="location.reload()">Retry</button></div>');return}
+  $('#who').textContent=S.uname?'@'+S.uname:'';
+  INBOX?startInbox():startMember();
+});
+function loginView(msg){
+  $('#who').textContent='';
+  view(`<h1>${INBOX?'Inbox':'Group Connected forms'}</h1>
+  <p class="mut">${INBOX?'Admin sign in.':'For labels, groups and artists. Sign in with your groupconnected.uk email and password.'}</p>
+  <div class="card" style="margin-top:16px">
+    <label class="f" for="em">Email</label><input id="em" type="email" autocomplete="email">
+    <label class="f" for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <div class="err" id="ae">${esc(msg||'')}</div>
+    <div class="acts"><button class="p" onclick="login()">Sign in</button><button class="s" onclick="forgot()">Forgot password</button></div>
+  </div>`);
+}
+async function login(){
+  const e=$('#ae');e.className='err';e.textContent='';const em=$('#em').value.trim(),p=$('#pw').value;
+  if(!/^\S+@\S+\.\S+$/.test(em)){e.textContent='Enter a valid email';return}
+  try{await auth.signInWithEmailAndPassword(em,p)}catch(x){e.textContent=AERR[x.code]||'Something went wrong. Try again.'}
+}
+async function forgot(){
+  const e=$('#ae'),em=$('#em').value.trim();if(!em){e.textContent='Enter your email first';return}
+  try{await auth.sendPasswordResetEmail(em);e.className='err ok';e.textContent='Password reset email sent'}catch(x){e.className='err';e.textContent=AERR[x.code]||'Could not send email'}
+}
+const logout=()=>auth.signOut();
+
+/* ================= MEMBER SIDE ================= */
+async function startMember(){
+  if(!S.uname){view('<div class="card"><h2>Finish setting up first</h2><p class="mut">Open groupconnected.uk and pick your username, then come back.</p><a class="s" href="https://groupconnected.uk/">Go to Group Connected</a></div>');return}
+  if(!S.admin&&!ROLE[S.role]){view(`<div class="card"><h2>Not available</h2><p class="mut">These forms are only for labels, groups and artists. @${esc(S.uname)} is a ${esc(S.role||'fan')} account.</p></div>`);return}
+  view('<p class="mut">Loading forms…</p>');
+  try{
+    const sn=await db.collection('forms').where('open','==',true).get();
+    S.forms=sn.docs.map(d=>({id:d.id,...d.data()})).filter(f=>S.admin||f['for']==='all'||f['for']===S.role).sort((a,b)=>b.ts-a.ts);
+  }catch(e){console.error(e);view(`<div class="card"><h2>Could not load forms</h2><p class="mut">${e.code==='permission-denied'?'Firestore blocked the read. Publish the new firestore.rules in Firebase, then reload.':'Try again in a moment.'}</p><p class="mut">Error: ${esc(e.code||e.message)}</p></div>`);return}
+  const f=FORM_ID&&S.forms.find(x=>x.id===FORM_ID);
+  if(f)fillView(f.id);else memberList(FORM_ID?'That form is closed or not available for your account.':'');
+}
+function memberList(note){
+  view(`<h1>Forms</h1><p class="mut">Signed in as <b>@${esc(S.uname)}</b> · ${esc(ROLE[S.role]||'Admin')}</p>
+  ${note?`<p class="err">${esc(note)}</p>`:''}
+  <div class="formlist">${S.forms.length?S.forms.map(f=>`<button class="fl" onclick="fillView('${esc(f.id)}')"><b>${esc(f.title)}</b><span class="mut">${esc(f.intro||'').slice(0,120)}</span></button>`).join(''):`<p class="mut">No forms are open right now.${S.admin?' Create one below.':''}</p>`}</div>
+  ${S.admin?'<div class="card" style="margin-top:22px"><b>You are the CEO / admin</b><p class="mut" style="margin:4px 0 12px">Build forms and read responses in the inbox.</p><div class="acts" style="margin-top:0"><a class="p" style="text-decoration:none;display:inline-block" href="?inbox&forms">+ Create a form</a><a class="s" href="?inbox">Open inbox</a></div></div>':''}`);
+}
+function fillView(id){
+  const f=S.forms.find(x=>x.id===id);if(!f)return;S.fill=f;
+  const fields=(f.fields||[]).map((q,i)=>{
+    const req=q.req?'<i>*</i>':'';let inp;
+    if(q.type==='long')inp=`<textarea id="q${i}" maxlength="2000"></textarea>`;
+    else if(q.type==='choice')inp=`<select id="q${i}"><option value="">Choose…</option>${(q.opts||[]).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
+    else inp=`<input id="q${i}" maxlength="${q.type==='link'?300:200}" ${q.type==='link'?'type="url" placeholder="https://"':''}>`;
+    return `<label class="f" for="q${i}">${esc(q.label)}${req}</label>${inp}`;
+  }).join('');
+  view(`<p><button class="s" onclick="memberList()">← All forms</button></p>
+  <h1>${esc(f.title)}</h1>${f.intro?`<p class="mut" style="white-space:pre-wrap">${esc(f.intro)}</p>`:''}
+  <div class="card" style="margin-top:14px"><p class="mut" style="margin:0">Sending as <b>@${esc(S.uname)}</b></p>${fields}
+  <div class="err" id="fe"></div><button class="p" id="sendb" onclick="sendForm()">Send</button></div>`);
+}
+async function sendForm(){
+  const f=S.fill,e=$('#fe');e.textContent='';if(!f||S.busy)return;
+  if(Date.now()-S.lastSend<20000){e.textContent='Please wait a few seconds before sending again.';return}
+  const answers=[];
+  for(let i=0;i<f.fields.length;i++){
+    const q=f.fields[i];let v=$('#q'+i).value.trim();
+    if(q.req&&!v){e.textContent='Please fill in: '+q.label;return}
+    if(v&&q.type==='link'&&!/^https?:\/\/\S+$/i.test(v)){e.textContent='“'+q.label+'” must be a link starting with https://';return}
+    if(v&&q.type==='choice'&&!(q.opts||[]).includes(v)){e.textContent='Choose an option for: '+q.label;return}
+    answers.push({q:String(q.label).slice(0,120),a:v.slice(0,2000)});
+  }
+  S.busy=true;$('#sendb').disabled=true;
+  try{
+    const b=db.batch(),sref=db.collection('submissions').doc(),ts=Date.now();
+    b.set(sref,{form:f.id,title:f.title,u:S.uname,role:S.role,uid:S.user.uid,answers,status:'new',ts});
+    let txt='New response to “'+f.title+'”\nFrom @'+S.uname+' ('+S.role+')\n\n'+answers.map(x=>x.q+'\n'+(x.a||'—')).join('\n\n');
+    if(txt.length>2700)txt=txt.slice(0,2700)+'…';
+    txt+='\n\nRead and reply: '+SITE+'/forms.html?inbox';
+    b.set(db.collection('mail').doc(),{to:[CEO_EMAIL],message:{subject:'Group Connected: new response from @'+S.uname+' – '+f.title.slice(0,80),text:txt}});
+    await b.commit();S.lastSend=Date.now();
+    view(`<div class="card"><h1>Sent ✓</h1><p>Thanks @${esc(S.uname)}. Your response to “${esc(f.title)}” has gone to the Group Connected team.</p><button class="s" onclick="memberList()">Back to forms</button></div>`);
+  }catch(x){console.error(x);e.textContent='Could not send. Check your connection and try again.';$('#sendb').disabled=false}
+  S.busy=false;
+}
+
+/* ================= ADMIN INBOX ================= */
+function startInbox(){
+  if(!S.admin){view('<div class="card"><h2>No access</h2><p class="mut">This inbox is for the Group Connected admin account only.</p></div>');return}
+  let first=true;
+  const un1=db.collection('submissions').orderBy('ts','desc').limit(200).onSnapshot(sn=>{
+    S.subs=sn.docs.map(d=>({id:d.id,...d.data()}));
+    if(!first)sn.docChanges().forEach(c=>{if(c.type==='added'&&c.doc.data().status==='new')alertNew(c.doc.data())});
+    first=false;badge();if(S.page==='resp')renderInbox()
+  },e=>{console.error(e);toast('Could not load responses')});
+  const un2=db.collection('forms').orderBy('ts','desc').onSnapshot(sn=>{S.forms=sn.docs.map(d=>({id:d.id,...d.data()}));if(S.page==='forms'&&!S.edit)renderInbox()},e=>console.error(e));
+  unsub=()=>{un1();un2()};
+  renderInbox();
+}
+const newCount=()=>S.subs.filter(s=>s.status==='new').length;
+function badge(){const n=newCount();document.title=(n?'('+n+') ':'')+'GC Inbox';try{n?navigator.setAppBadge&&navigator.setAppBadge(n):navigator.clearAppBadge&&navigator.clearAppBadge()}catch(e){}}
+function alertNew(s){
+  const t='New response from @'+s.u,b=s.title;toast(t+' · '+b,5000);
+  try{if('Notification' in window&&Notification.permission==='granted'){navigator.serviceWorker.getRegistration().then(r=>r&&r.showNotification?r.showNotification(t,{body:b,icon:'https://groupconnected.uk/icon-192.png',tag:'gc-sub'}):new Notification(t,{body:b,icon:'https://groupconnected.uk/icon-192.png'}))}}catch(e){}
+}
+async function enableAlerts(){try{const p=await Notification.requestPermission();toast(p==='granted'?'Alerts on while the app is open':'Alerts blocked in browser settings')}catch(e){toast('Alerts are not supported here')}renderInbox()}
+async function installApp(){if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;renderInbox()}else toast(/iphone|ipad/i.test(navigator.userAgent)?'Tap Share, then “Add to Home Screen”':'Use your browser menu → Install app')}
+
+function renderInbox(){
+  const n=newCount(),standalone=matchMedia('(display-mode:standalone)').matches||navigator.standalone;
+  const canNotif='Notification' in window,notifOn=canNotif&&Notification.permission==='granted';
+  view(`<div class="tabs"><button class="${S.page==='resp'?'on':''}" onclick="S.page='resp';renderInbox()">Responses${n?`<span class="n">${n}</span>`:''}</button><button class="${S.page==='forms'?'on':''}" onclick="S.page='forms';S.edit=null;renderInbox()">Forms</button></div>
+  <div id="body">${S.page==='resp'?respHtml():S.edit?editHtml():formsHtml()}</div>
+  ${S.page==='resp'&&(!notifOn||!standalone)?`<div class="card" style="margin-top:22px"><b>This device</b><p class="mut" style="margin:4px 0 10px">Install the app on your phone, and turn on alerts for pop-ups while it’s open. When it’s closed, the email tells you.</p><div class="acts" style="margin-top:0">${standalone?'':'<button class="s" onclick="installApp()">⬇ Install app</button>'}${notifOn||!canNotif?'':'<button class="s" onclick="enableAlerts()">🔔 Turn on alerts</button>'}</div></div>`:''}`);
+}
+
+/* --- responses --- */
+function respHtml(){
+  const L=S.subs.filter(s=>S.tab==='all'||s.status===S.tab);
+  const tb=(k,l)=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';S.open=null;renderInbox()">${l}</button>`;
+  return `<div class="tabs" style="margin-top:0">${tb('new','New')}${tb('replied','Replied')}${tb('all','All')}</div>`+
+    (L.length?L.map(itemHtml).join(''):`<p class="mut">${S.tab==='new'?'Nothing new. 🎉':'No responses here yet.'}</p>`);
+}
+function itemHtml(s){
+  const o=S.open===s.id,em=S.emails[s.uid];
+  const first=(s.answers&&s.answers[0]&&s.answers[0].a)||'';
+  let h=`<div class="item ${s.status==='new'?'new':''}"><button class="row" onclick="toggle('${s.id}')" aria-expanded="${o}"><div class="t"><b>${esc(s.title)}</b><span>@${esc(s.u)} · ${esc(ROLE[s.role]||s.role)}${first?' · '+esc(first):''}</span></div><time>${when(s.ts)}</time></button>`;
+  if(o){
+    h+=`<div class="det"><dl>${(s.answers||[]).map(x=>`<dt>${esc(x.q)}</dt><dd>${esc(x.a||'—')}</dd>`).join('')}</dl><div class="acts">
+    <button class="p" onclick="setStatus('${s.id}','${s.status==='new'?'replied':'new'}')">${s.status==='new'?'Mark replied':'Mark as new'}</button>
+    ${em?`<a class="s" href="mailto:${esc(em)}?subject=${encodeURIComponent('Re: '+s.title)}">Email reply</a>`:'<span class="mut">No email on file</span>'}
+    <button class="s" onclick="copy('@${esc(s.u)}','Username copied')">Copy @${esc(s.u)}</button>
+    <button class="d" onclick="delSub('${s.id}')">Delete</button></div></div>`;
+  }
+  return h+'</div>';
+}
+async function toggle(id){
+  S.open=S.open===id?null:id;renderInbox();
+  const s=S.subs.find(x=>x.id===id);
+  if(S.open&&s&&!(s.uid in S.emails)){try{const d=await db.doc('private/'+s.uid).get();S.emails[s.uid]=d.exists?(d.data().email||''):''}catch(e){S.emails[s.uid]=''}if(S.open===id)renderInbox()}
+}
+async function setStatus(id,st){try{await db.doc('submissions/'+id).update({status:st});toast(st==='replied'?'Marked replied':'Marked new')}catch(e){toast('Could not update')}}
+async function delSub(id){if(!confirm('Delete this response for good?'))return;try{await db.doc('submissions/'+id).delete();S.open=null}catch(e){toast('Could not delete')}}
+
+/* --- form builder --- */
+function formsHtml(){
+  return `<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><h2>Forms</h2><span class="mut">Members only: labels, groups and artists.</span></div><button class="p" onclick="newForm()">+ New form</button></div>
+  <div style="margin-top:14px">${S.forms.length?S.forms.map(f=>{const url=SITE+'/forms.html?form='+f.id;return `<div class="item" style="padding:14px"><b>${esc(f.title)}</b><span class="pill ${f.open?'on':''}">${f.open?'Open':'Off'}</span><span class="pill">${f['for']==='all'?'Labels + artists':f['for']==='label'?'Labels only':'Artists only'}</span>
+  <div class="mut">${(f.fields||[]).length} question${(f.fields||[]).length===1?'':'s'}</div>
+  <div class="link"><code>${esc(url)}</code><button class="s" onclick="copy('${esc(url)}','Link copied')">Copy</button></div>
+  <div class="acts" style="margin-top:6px"><button class="s" onclick="toggleOpen('${f.id}',${!f.open})">${f.open?'Switch off':'Switch on'}</button><button class="s" onclick="editForm('${f.id}')">Edit</button><button class="d" onclick="delForm('${f.id}')">Delete</button></div></div>`}).join(''):'<p class="mut">No forms yet. Tap “New form” to build one.</p>'}</div>`;
+}
+const blankQ=()=>({label:'',type:'text',req:true,opts:[]});
+function newForm(){S.edit={id:null,title:'',intro:'',for:'all',open:true,fields:[blankQ()]};renderInbox()}
+function editForm(id){const f=S.forms.find(x=>x.id===id);if(!f)return;S.edit={id,title:f.title,intro:f.intro||'',for:f['for']||'all',open:!!f.open,fields:JSON.parse(JSON.stringify(f.fields||[]))};renderInbox()}
+function editHtml(){
+  const E=S.edit;
+  return `<p><button class="s" onclick="S.edit=null;renderInbox()">← Back</button></p><h2>${E.id?'Edit form':'New form'}</h2>
+  <label class="f" for="et">Title</label><input id="et" maxlength="100" value="${esc(E.title)}">
+  <label class="f" for="ei">Intro (optional)</label><textarea id="ei" maxlength="1000" style="min-height:80px">${esc(E.intro)}</textarea>
+  <label class="f" for="ef">Who can fill it in</label><select id="ef"><option value="all" ${E['for']==='all'?'selected':''}>Labels, groups and artists</option><option value="label" ${E['for']==='label'?'selected':''}>Labels only</option><option value="artist" ${E['for']==='artist'?'selected':''}>Groups and artists only</option></select>
+  <div class="inl"><input type="checkbox" id="eo" ${E.open?'checked':''}><label for="eo">Switched on (members can see it)</label></div>
+  <label class="f">Questions</label>
+  ${E.fields.map((q,i)=>`<div class="fld"><input id="fl${i}" maxlength="120" placeholder="Question" value="${esc(q.label)}">
+    <div class="two"><select id="ft${i}" onchange="readEdit();renderInbox()">${Object.entries(TYPES).map(([k,v])=>`<option value="${k}" ${q.type===k?'selected':''}>${v}</option>`).join('')}</select>
+    <div class="inl" style="margin:0"><input type="checkbox" id="fr${i}" ${q.req?'checked':''}><label for="fr${i}">Required</label></div></div>
+    ${q.type==='choice'?`<textarea id="fo${i}" style="min-height:70px;margin-top:8px" placeholder="One option per line">${esc((q.opts||[]).join('\n'))}</textarea>`:''}
+    <div class="acts"><button class="s" onclick="moveQ(${i},-1)" ${i?'':'disabled'}>↑</button><button class="s" onclick="moveQ(${i},1)" ${i<E.fields.length-1?'':'disabled'}>↓</button><button class="d" onclick="delQ(${i})">Remove</button></div></div>`).join('')}
+  <button class="s" onclick="addQ()" ${E.fields.length>=20?'disabled':''}>+ Add question</button>
+  <div class="err" id="ee"></div><button class="p" onclick="saveForm()">Save form</button>`;
+}
+function readEdit(){
+  const E=S.edit;if(!E||!$('#et'))return;
+  E.title=$('#et').value;E.intro=$('#ei').value;E['for']=$('#ef').value;E.open=$('#eo').checked;
+  E.fields.forEach((q,i)=>{q.label=$('#fl'+i).value;q.type=$('#ft'+i).value;q.req=$('#fr'+i).checked;const o=$('#fo'+i);if(o)q.opts=o.value.split('\n').map(x=>x.trim()).filter(Boolean)});
+}
+function addQ(){readEdit();S.edit.fields.push(blankQ());renderInbox()}
+function delQ(i){readEdit();S.edit.fields.splice(i,1);renderInbox()}
+function moveQ(i,d){readEdit();const F=S.edit.fields,j=i+d;if(j<0||j>=F.length)return;[F[i],F[j]]=[F[j],F[i]];renderInbox()}
+async function saveForm(){
+  readEdit();const E=S.edit,e=$('#ee');e.textContent='';
+  const title=E.title.trim();if(!title){e.textContent='Give the form a title';return}
+  if(!E.fields.length){e.textContent='Add at least one question';return}
+  const fields=[];
+  for(const q of E.fields){
+    const label=q.label.trim();if(!label){e.textContent='Every question needs some text';return}
+    const f={label,type:q.type,req:!!q.req};
+    if(q.type==='choice'){const o=(q.opts||[]).slice(0,20);if(o.length<2){e.textContent='“'+label+'” needs at least two options';return}f.opts=o.map(x=>x.slice(0,80))}
+    fields.push(f);
+  }
+  const data={title,intro:E.intro.trim(),for:E['for'],open:!!E.open,fields,ts:Date.now()};
+  try{
+    if(E.id)await db.doc('forms/'+E.id).set(data);else await db.collection('forms').add(data);
+    S.edit=null;toast('Form saved');renderInbox();
+  }catch(x){console.error(x);e.textContent='Could not save. Have you published the new Firestore rules?'}
+}
+async function toggleOpen(id,v){const f=S.forms.find(x=>x.id===id);if(!f)return;try{await db.doc('forms/'+id).set({...stripId(f),open:v,ts:Date.now()});toast(v?'Form is on':'Form is off')}catch(e){toast('Could not update')}}
+const stripId=f=>{const c={...f};delete c.id;return c};
+async function delForm(id){if(!confirm('Delete this form? Responses already sent are kept.'))return;try{await db.doc('forms/'+id).delete()}catch(e){toast('Could not delete')}}
+</script>
+</body></html>
