@@ -118,7 +118,8 @@ let openId=null,denyId=null,draft=null,shown=false;
 
 function toast(t){const e=document.createElement('div');e.className='toast';e.setAttribute('role','status');e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),3500)}
 function ago(ts){const s=Math.max(1,Math.floor((Date.now()-ts)/1000));if(s<60)return 'just now';const m=Math.floor(s/60);if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' h ago';const d=Math.floor(h/24);if(d<7)return d+' d ago';return new Date(ts).toLocaleDateString()}
-const formUrl=id=>SITE+'/forms.html?form='+id;
+const PAGE=location.origin+location.pathname;
+const formUrl=id=>PAGE+'?form='+id;
 const nid=()=>Math.random().toString(36).slice(2,8);
 const errText=e=>(e&&e.code?e.code+': ':'')+(e&&e.message?e.message:String(e));
 async function copy(t){try{await navigator.clipboard.writeText(t);toast('Copied')}catch(e){toast('Couldn’t copy')}}
@@ -269,7 +270,7 @@ async function sendForm(f){
   /* email the CEO (needs the Trigger Email extension); never blocks the submission */
   try{
     const body=answers.map(x=>x.q+': '+x.a.slice(0,300)).join('\n');
-    await db.collection('mail').doc(ref.id).set({to:[CEO_EMAIL],message:{subject:'Group Connected: new submission – '+f.title,text:('@'+me+' ('+role+') submitted “'+f.title+'”.\n\n'+body+'\n\nReview it: '+SITE+'/forms.html?inbox').slice(0,2800)}});
+    await db.collection('mail').doc(ref.id).set({to:[CEO_EMAIL],message:{subject:'Group Connected: new submission – '+f.title,text:('@'+me+' ('+role+') submitted “'+f.title+'”.\n\n'+body+'\n\nReview it: '+PAGE+'?inbox').slice(0,2800)}});
   }catch(e){console.warn('mail',e)}
   sub=null;tab='submitted';toast('Sent. The CEO will review it.');render();
 }
